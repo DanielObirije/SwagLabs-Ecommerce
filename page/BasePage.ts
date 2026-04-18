@@ -1,5 +1,8 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import { AiService } from "services/AiService";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 export class BasePage {
   readonly page: Page;
@@ -61,8 +64,12 @@ export class BasePage {
         console.error(`[Self-Healing] ❌ No valid selector returned.`);
         return false;
       }
+      console.log(
+        "suggestedSelector:",
+        JSON.stringify(suggestedSelector, null, 2),
+      );
 
-      this.reportHealing(originalSelector, suggestedSelector, context);
+      // this.reportHealing(originalSelector, suggestedSelector, context);
 
       await this.clickWithWait(suggestedSelector);
 
@@ -96,6 +103,7 @@ export class BasePage {
     if (!response) {
       return null;
     }
+    console.log("api response:", JSON.stringify(response, null, 2));
     const codeMatch = response.match(/`([^`]+)`/);
     if (codeMatch) return codeMatch[1].trim();
 
@@ -103,6 +111,8 @@ export class BasePage {
     if (trimmed.startsWith("#") || trimmed.startsWith(".")) {
       return trimmed;
     }
+    // // console.log(`extractSelector  ${trimmed}`);
+    // console.log("extractSelector:", trimmed);
     return null;
   }
 }

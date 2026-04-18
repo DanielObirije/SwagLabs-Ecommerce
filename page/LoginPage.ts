@@ -7,6 +7,7 @@ export class LoginPage extends BasePage {
   private readonly passwordinput = "#password";
   private readonly loginbutton = "#login-button";
   private readonly titiletext = ".title";
+  private readonly errorcContainer = '[data-test="error"]';
 
   constructor(page: Page, ai: AiService) {
     super(page, ai);
@@ -33,12 +34,17 @@ export class LoginPage extends BasePage {
         await this.page.waitForSelector(this.titiletext, {
           state: "visible",
         });
-        console.log(`[Login] ✅ Success: Inventory loaded!`);
       } else {
         console.log(`[Login] ⏳ Waiting for error message...`);
       }
     } catch (error) {
       throw error;
     }
+  }
+
+  async validateErrorMessage(message: string) {
+    const errorcContainer = this.page.locator(this.errorcContainer);
+    expect(errorcContainer).toBeVisible();
+    expect(errorcContainer).toHaveText(message);
   }
 }

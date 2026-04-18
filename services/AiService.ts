@@ -1,3 +1,7 @@
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
 export class AiService {
   private readonly endpoint: string;
   private readonly token: string;
@@ -5,14 +9,15 @@ export class AiService {
 
   constructor() {
     this.endpoint = process.env.AZURE_AI_URL ?? "";
-    this.token = process.env.API_BASE_URL ?? "";
+    this.token = process.env.AZURE_AI_TOKEN ?? "";
   }
 
   async analyzeFaluire(errorMessage: string, domSnapshort: string) {
-    if (!this.token) return "AI disabled: Token missing.";
+    if (!this.token)
+      return `AI disabled: Token missing. ${process.env.AZURE_AI_TOKEN}`;
     try {
       const payload = this.buildRequestPaylaod(errorMessage, domSnapshort);
-      const response = this.callAI(payload);
+      const response = await this.callAI(payload);
       return this.extractContent(response);
     } catch (error) {
       return this.handleError(error);

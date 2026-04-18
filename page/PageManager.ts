@@ -1,6 +1,5 @@
 import { Page, expect } from "@playwright/test";
 import { AiService } from "services/AiService";
-import { BasePage } from "./BasePage";
 import { LoginPage } from "./LoginPage";
 
 export class PageManager {
@@ -14,5 +13,20 @@ export class PageManager {
   constructor(page: Page) {
     this.page = page;
     this.ai = new AiService();
+  }
+
+  public setAllureAttach(fun: (content: string, type: string) => void) {
+    this.attachFn = fun;
+    if (this.loginPage) {
+      this.loginPage.setAttachFunction(fun);
+    }
+  }
+
+  public login() {
+    if (!this.loginPage) {
+      this.loginPage = new LoginPage(this.page, this.ai);
+      if (this.attachFn) this.loginPage.setAttachFunction(this.attachFn);
+    }
+    return this.login;
   }
 }
