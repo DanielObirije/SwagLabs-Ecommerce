@@ -17,6 +17,7 @@
     "@types/node": "^25.6.0"
   },
   "dependencies": {
+    "@cucumber/cucumber": "^12.8.1",
     "@faker-js/faker": "^10.4.0",
     "dotenv": "^17.4.1"
   }
