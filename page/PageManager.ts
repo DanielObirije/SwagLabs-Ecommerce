@@ -22,11 +22,12 @@ export class PageManager {
     }
   }
 
-  public login() {
+  public get login() {
     if (!this.loginPage) {
       this.loginPage = new LoginPage(this.page, this.ai);
       if (this.attachFn) this.loginPage.setAttachFunction(this.attachFn);
     }
-    return this.login;
+    return this.loginPage;
   }
+
 }

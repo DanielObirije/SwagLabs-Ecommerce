@@ -6,6 +6,7 @@ import { AllureCucumberWorld } from "allure-cucumberjs";
 export class customWorld extends AllureCucumberWorld {
   page?: Page;
   pageManager?: PageManager;
+  
 
   constructor(options: IWorldOptions) {
     super(options);

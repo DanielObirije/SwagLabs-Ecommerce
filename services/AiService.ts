@@ -2,6 +2,14 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
+type AIResponse = {
+  choices?: {
+    message?: {
+      content?: string;
+    };
+  }[];
+};
+
 export class AiService {
   private readonly endpoint: string;
   private readonly token: string;
@@ -44,7 +52,7 @@ export class AiService {
     return `Error: ${error}\n\nDOM:\n${truncatedDom}`;
   }
 
-  private async callAI(payload: object): any {
+  private async callAI(payload: object): Promise<AIResponse> {
     const res = await fetch(this.endpoint, {
       method: "POST",
       headers: this.getHeaders(),

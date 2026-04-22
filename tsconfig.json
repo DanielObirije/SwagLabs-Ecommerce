@@ -9,7 +9,7 @@
     "baseUrl": ".",
     "paths": {
       "services/*": ["services/*"],
-      "pages/*": ["pages/*"]
+      "page/*": ["page/*"]
     },
 
     "allowImportingTsExtensions": true,
