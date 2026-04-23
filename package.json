@@ -7,7 +7,7 @@
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:ui": "playwright test --ui",
-    "test:cucumber": "cucumber-js --format summary --require-module ts-node/register --require-module tsconfig-paths/register"
+    "test:cucumber": "cucumber-js --config cucumber.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
     "@cucumber/pretty-formatter": "^3.2.0",
     "@playwright/test": "^1.59.1",
     "@types/node": "^25.6.0",
+    "allure-commandline": "^2.38.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^6.0.3"

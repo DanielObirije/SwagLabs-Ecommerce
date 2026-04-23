@@ -48,13 +48,13 @@ Before(async function (this: customWorld, scenario: ITestCaseHookParameter) {
   const scenarioName = scenario.pickle.name;
 
   // Allure labels
-  // if (this.label) {
-  //   this.label("framework", "cucumberjs");
-  //   this.label("language", "typescript");
-  //   this.label("parentSuite", "E2E Web");
-  //   this.label("suite", featureName);
-  //   this.label("subSuite", scenarioName);
-  // }
+  if (this.label) {
+    this.label("framework", "cucumberjs");
+    this.label("language", "typescript");
+    this.label("parentSuite", "E2E Web");
+    this.label("suite", featureName);
+    this.label("subSuite", scenarioName);
+  }
 
   context = await browser.newContext({
     ignoreHTTPSErrors: true,
