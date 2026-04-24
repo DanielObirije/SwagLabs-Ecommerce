@@ -13,6 +13,10 @@ export class InventroyPage extends BasePage {
   private readonly hamBurgerMenu = "#react-burger-menu-btn";
   private readonly sortDropdown = ".product_sort_container";
   private readonly inventoryImage = ".inventory_item_img img";
+  private readonly productItemName = ".inventory_item_name ";
+  private readonly productDescription = ".inventory_item_desc";
+  private readonly productItemPrice = ".inventory_item_price";
+  private readonly sortProduct = ".product_sort_container";
 
   constructor(page: Page, ai: AiService) {
     super(page, ai);
@@ -63,6 +67,71 @@ export class InventroyPage extends BasePage {
 
   async validateImageLoad() {
     const image = await this.page.locator(this.inventoryImage).all();
-    
+    await Promise.all(
+      image.map(async (img) => {
+        const src = img.getAttribute("src");
+        expect(src).toBeTruthy();
+        await expect(img).toBeVisible();
+      }),
+    );
+  }
+
+  async validateProductNames() {
+    const productname = await this.page
+      .locator(this.productItemName)
+      .allInnerTexts();
+    productname.forEach((name) => {
+      expect(name.length).toBeGreaterThan(0);
+      expect(name.trim()).not.toBe("");
+    });
+  }
+
+  async validateProductDescription() {
+    const description = await this.page
+      .locator(this.productDescription)
+      .allInnerTexts();
+    description.forEach((des) => {
+      expect(des.length).toBeGreaterThan(0);
+    });
+  }
+
+  async validateProductItemPrice() {
+    const prices = await this.page
+      .locator(this.productItemPrice)
+      .allInnerTexts();
+    prices.forEach((price) => {
+      expect(price).toBeGreaterThan(0);
+      expect(price).toMatch(/\$\d+\.\d{2}/);
+    });
+  }
+  
+  async validateProductButtons(buttonText: string) {
+    const buttons = await this.page.locator(this.addToCartBtn).allInnerTexts();
+    buttons.forEach((text) =>
+      expect(text.toLowerCase()).toBe(buttonText.toLowerCase()),
+    );
+  }
+
+  async validateSpecificProduct(productDetails: string[][]) {
+    for (const [name, price] of productDetails) {
+      const productName = this.page.locator(this.productItemName, {
+        hasText: name,
+      });
+      await expect(productName).toBeVisible();
+      await expect(productName.locator(this.productItemPrice)).toHaveText(
+        price,
+      );
+    }
+  }
+
+  async validateSortOption(expectedOptions: string[]) {
+    const options = await this.page
+      .locator(`${this.sortDropdown} option`)
+      .allInnerTexts();
+    expectedOptions.forEach((text) => {
+      expect(
+        options.some((option) => option.trim() === text.trim()),
+      ).toBeTruthy();
+    });
   }
 }
