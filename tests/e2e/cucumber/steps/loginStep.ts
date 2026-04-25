@@ -9,9 +9,9 @@ Given("that I am on the login page", async function (this: customWorld) {
   if (!this.pageManager) {
     this.pageManager = new PageManager(this.page!);
   }
-
   await this.pageManager.login.naviage();
 });
+
 When("I fill in valid credentials", async function () {
   const user = process.env.STANDARD_USER || "standard_user";
   const pass = process.env.SECRET_SAUCE || "secret_sauce";
