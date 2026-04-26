@@ -25,7 +25,6 @@ export class InventroyPage extends BasePage {
   async waitInventryLoad() {
     await this.page.waitForSelector(this.inventeryContainer, {
       state: "visible",
-      timeout: 10000,
     });
   }
 
@@ -61,7 +60,7 @@ export class InventroyPage extends BasePage {
   }
 
   async validateProductCount(count: number) {
-    const items = this.page.locator(this.productItem).count();
+    const items = await this.page.locator(this.productItem).count();
     expect(items).toBe(count);
   }
 
@@ -100,11 +99,12 @@ export class InventroyPage extends BasePage {
       .locator(this.productItemPrice)
       .allInnerTexts();
     prices.forEach((price) => {
-      expect(price).toBeGreaterThan(0);
+      const numberPrice = parseFloat(price.replace("$", "").trim());
+      expect(numberPrice).toBeGreaterThan(0);
       expect(price).toMatch(/\$\d+\.\d{2}/);
     });
   }
-  
+
   async validateProductButtons(buttonText: string) {
     const buttons = await this.page.locator(this.addToCartBtn).allInnerTexts();
     buttons.forEach((text) =>

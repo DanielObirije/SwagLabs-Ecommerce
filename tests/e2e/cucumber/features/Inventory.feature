@@ -14,4 +14,23 @@ Feature: Inventory Page Componet Validation
     And I should see the shopping cart
     And I should see the sorting filter
 
+  @inventory @components @products
+  Scenario: Validate list of available products
+    Then I should see 6 products in the list
+    And each product should have an image
+    And each product should have a name
+    And each product should have a description
+    And each product should have a price
+    And each product should have an "Add to cart" button
+
+  
+  @inventory  @sorting
+  Scenario: Validate sorting options
+    Then I should see the following sorting options:
+      | Name (A to Z)         |
+      | Name (Z to A)         |
+      | Price (low to high)   |
+      | Price (high to low)   |
+  
+  
   

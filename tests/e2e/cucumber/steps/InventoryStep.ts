@@ -1,6 +1,6 @@
 import { expect } from "@playwright/test";
 import { PageManager } from "page/PageManager";
-import { Given, Then, When } from "@cucumber/cucumber";
+import { DataTable, Given, Then, When } from "@cucumber/cucumber";
 import { customWorld } from "../support/word";
 
 import * as dotenv from "dotenv";
@@ -17,7 +17,7 @@ Given("that I am logged into the system", async function (this: customWorld) {
 Given("I am on the inventory page", async function (this: customWorld) {
   await expect(this.page!).toHaveURL(/.*inventory\.html/);
 
-  this.pageManager!.inventory.waitInventryLoad();
+  await this.pageManager!.inventory.waitInventryLoad();
 });
 
 Then(
@@ -38,3 +38,44 @@ Then("I should see the shopping cart", async function (this: customWorld) {
 Then("I should see the sorting filter", async function (this: customWorld) {
   await this.pageManager!.inventory.validateSortDropdown();
 });
+
+Then(
+  "I should see {int} products in the list",
+  async function (this: customWorld, count) {
+    await this.pageManager!.inventory.validateProductCount(count);
+  },
+);
+
+Then("each product should have an image", async function (this: customWorld) {
+  await this.pageManager!.inventory.validateImageLoad();
+});
+
+Then("each product should have a name", async function (this: customWorld) {
+  await this.pageManager!.inventory.validateProductNames();
+});
+
+Then(
+  "each product should have a description",
+  async function (this: customWorld) {
+    await this.pageManager!.inventory.validateProductDescription();
+  },
+);
+Then("each product should have a price", async function (this: customWorld) {
+  await this.pageManager!.inventory.validateProductItemPrice();
+});
+
+Then(
+  "each product should have an {string} button",
+  async function (this: customWorld, buttonText) {
+    await this.pageManager!.inventory.validateProductButtons(buttonText);
+  },
+);
+Then(
+  "I should see the following sorting options:",
+  async function (this: customWorld, dataTable: DataTable) {
+    const options = dataTable.raw().flat();
+    await this.pageManager!.inventory.validateSortOption(options);
+  },
+);
+
+

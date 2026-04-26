@@ -2,6 +2,7 @@ import { Page, expect } from "@playwright/test";
 import { AiService } from "services/AiService";
 import { LoginPage } from "./LoginPage";
 import { InventroyPage } from "./InventoryPage";
+import { cartPage } from "./CartPage";
 
 export class PageManager {
   private readonly page: Page;
@@ -9,6 +10,7 @@ export class PageManager {
 
   private loginPage?: LoginPage;
   private invetoryPage?: InventroyPage;
+  private cartPage?: cartPage;
 
   private attachFn?: (content: string, type: string) => void;
 
@@ -21,6 +23,7 @@ export class PageManager {
     this.attachFn = fun;
     if (this.loginPage) this.loginPage.setAttachFunction(fun);
     if (this.invetoryPage) this.invetoryPage.setAttachFunction(fun);
+    if (this.cartPage) this.cartPage.setAttachFunction(fun);
   }
 
   public get login() {
@@ -39,4 +42,11 @@ export class PageManager {
     return this.invetoryPage;
   }
 
+  public get cart() {
+    if (!this.cartPage) {
+      this.cartPage = new cartPage(this.page, this.ai);
+      if (this.attachFn) this.cartPage.setAttachFunction(this.attachFn);
+    }
+    return this.cartPage;
+  }
 }
