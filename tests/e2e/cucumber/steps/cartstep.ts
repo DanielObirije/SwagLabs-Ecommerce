@@ -15,5 +15,19 @@ Given("that I am logged into the system", async function (this: customWorld) {
 });
 
 Given("the cart is empty", async function (this: customWorld) {
-    
+  await this.pageManager?.cart.validateEmptyItemInCart();
 });
+
+When(
+  "I add the product {string} to the cart",
+  async function (this: customWorld, productItem) {
+    await this.pageManager?.cart.addProductItemInCart(productItem);
+  },
+);
+
+Then(
+  "the cart should contain {string}",
+  async function (this: customWorld, productName) {
+    await this.pageManager?.cart.expectItemInCart(productName);
+  },
+);

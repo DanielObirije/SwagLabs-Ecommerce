@@ -5,8 +5,9 @@ import { AiService } from "services/AiService";
 
 export class cartPage extends BasePage {
   private readonly cartItem = "cart_item";
-  private readonly checkoutButton = "data-test='checkout'";
-  private readonly checkoutContainer = "#checkout_info_container";
+  private readonly shopingCart = ".shopping_cart_link";
+  private readonly addToCartButton =
+    "data-test='add-to-cart-sauce-labs-backpack'";
   private readonly title = ".title";
   private readonly cartBadge = ".shopping_cart_badge";
 
@@ -14,27 +15,23 @@ export class cartPage extends BasePage {
     super(page, ai);
   }
 
-  async validateItemInCart(productName: string) {
+  async addProductItemInCart(productName: string) {
     const productItem = this.page.locator(this.cartItem, {
       hasText: productName,
     });
     await expect(productItem).toBeVisible();
+    await this.smartClick(this.addToCartButton, "Add to cart Button");
   }
 
   async validateEmptyItemInCart() {
-     const productItem = this.page.locator(this.cartBadge)
-     await expect(productItem).not.toBeVisible();
+    const productItem = this.page.locator(this.cartBadge);
+    await expect(productItem).not.toBeVisible();
   }
 
-  async proccedTocheckout() {
-    await this.smartClick(this.checkoutButton, "Checkout Button");
-    await this.page.waitForURL(/.*checkout-step-one.html\.html/);
-    await this.page.waitForSelector(this.checkoutContainer, {
-      state: "visible",
-    });
-  }
-
-  async validateTitle(expectedTitle: string) {
-    await expect(this.page.locator(this.title)).toHaveText(expectedTitle);
+  async expectItemInCart(productName: string) {
+    await this.smartClick(this.shopingCart, "Shoping cart Button");
+    await this.page.waitForURL(/.*cart\.html/);
+    const cartItem = this.page.locator(".cart_item", { hasText: productName });
+    expect(cartItem).toBeVisible();
   }
 }
