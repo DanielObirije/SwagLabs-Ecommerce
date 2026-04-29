@@ -1,38 +1,51 @@
-import { PageManager } from "./PageManager";
 import { expect, Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { AiService } from "services/AiService";
 
 export class cartPage extends BasePage {
   private readonly cartItem = ".cart_item";
-  private readonly shopingCart = ".shopping_cart_link";
-  private readonly addToCartButton =
-    "data-test='add-to-cart-sauce-labs-backpack'";
-  private readonly cartBadge = ".shopping_cart_badge";
-  private inventoryItem = ".inventory_item";
+  private readonly checkoutButton = "data-test='checkout'";
+  private readonly checkoutContainer = "#checkout_info_container";
+  private readonly continueShoppingButton = "#continue-shopping";
+  private readonly cartList = ".cart_list";
 
   constructor(page: Page, ai: AiService) {
     super(page, ai);
   }
 
-  // async addProductItemInCart(productName: string) {
-  //   const productItem = this.page.locator(this.inventoryItem, {
+  // async validateItemInCart(productName: string) {
+  //   const productItem = this.page.locator(this.cartItem, {
   //     hasText: productName,
   //   });
-  //   console.log(productItem);
   //   await expect(productItem).toBeVisible();
-  //   // await this.smartClick(this.addToCartButton, "Add to cart Button");
+  //    productItem.locator(this.addToCartButton).click()
   // }
-
-  async validateEmptyItemInCart() {
-    const productItem = this.page.locator(this.cartBadge);
-    await expect(productItem).not.toBeVisible();
+  async waitInventryLoad() {
+    await this.page.waitForSelector(this.cartList, {
+      state: "visible",
+    });
   }
 
-  async expectItemInCart(productName: string) {
-    await this.smartClick(this.shopingCart, "Shoping cart Button");
-    await this.page.waitForURL(/.*cart\.html/);
-    const cartItem = this.page.locator(this.cartItem, { hasText: productName });
-    expect(cartItem).toBeVisible();
+  async validateItemInCart(productName: string) {
+    this.waitInventryLoad();
+    // console.log(productName);
+    const item = this.page.locator(this.cartItem, { hasText: productName });
+    await expect(item).toBeVisible();
+    await  this.page.waitForTimeout(20000)
+  }
+
+  async proccedToCheckout() {
+    await this.smartClick(this.checkoutButton, "Checkout Button");
+    await this.page.waitForURL(/.*checkout-step-one\.html/);
+    await this.page.waitForSelector(this.checkoutContainer, {
+      state: "visible",
+    });
+  }
+
+  async continueShoopping() {
+    await this.smartClick(
+      this.continueShoppingButton,
+      "Continue shopping button",
+    );
   }
 }

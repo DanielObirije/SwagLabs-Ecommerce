@@ -29,18 +29,22 @@ export class InventroyPage extends BasePage {
   }
 
   async addItemToCart(productName: string) {
+    await this.waitInventryLoad();
     const item = this.page.locator(this.productItem, { hasText: productName });
     await expect(item).toBeVisible();
+
     await item.locator(this.addToCartBtn).click();
     await this.page.waitForSelector(this.cartBadge, {
       state: "visible",
     });
+    await this.goToCart();
+    await this.validateTitle("Your Cart");
   }
 
   async goToCart() {
     await this.page.locator(this.cartIcon).click();
     await this.page.waitForURL(/.*cart\.html/);
-    await this.page.waitForSelector(this.cartList, { state: "visible" });
+    // await this.page.waitForSelector(this.cartList, { state: "visible" });
   }
 
   async validateTitle(expectedTitle: string) {
