@@ -10,3 +10,5 @@ Feature: Product Checkout
   @task2 @checkout @smoke
   Scenario: Successful purchase (Positive Flow)
     When I access the cart
+    And I proceed to checkout
+    And I fill in the delivery details correctly

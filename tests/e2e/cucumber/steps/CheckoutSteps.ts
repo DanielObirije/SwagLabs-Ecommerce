@@ -26,3 +26,14 @@ Given(
 When("I access the cart", async function (this: customWorld) {
   await this.pageManager?.inventory.goToCart();
 });
+
+When("I proceed to checkout", async function (this: customWorld) {
+  await this.pageManager?.cart.proccedToCheckout();
+});
+
+When(
+  "I fill in the delivery details correctly",
+  async function (this: customWorld) {
+    await this.pageManager?.cart.proccedToCheckout();
+  },
+);

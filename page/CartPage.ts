@@ -4,7 +4,7 @@ import { AiService } from "services/AiService";
 
 export class cartPage extends BasePage {
   private readonly cartItem = ".cart_item";
-  private readonly checkoutButton = "data-test='checkout'";
+  private readonly checkoutButton = "#checkout";
   private readonly checkoutContainer = "#checkout_info_container";
   private readonly continueShoppingButton = "#continue-shopping";
   private readonly cartList = ".cart_list";
@@ -31,7 +31,6 @@ export class cartPage extends BasePage {
     // console.log(productName);
     const item = this.page.locator(this.cartItem, { hasText: productName });
     await expect(item).toBeVisible();
-    await  this.page.waitForTimeout(20000)
   }
 
   async proccedToCheckout() {
@@ -40,6 +39,7 @@ export class cartPage extends BasePage {
     await this.page.waitForSelector(this.checkoutContainer, {
       state: "visible",
     });
+    
   }
 
   async continueShoopping() {

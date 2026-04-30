@@ -3,6 +3,7 @@ import { AiService } from "services/AiService";
 import { LoginPage } from "./LoginPage";
 import { InventroyPage } from "./InventoryPage";
 import { cartPage } from "./CartPage";
+import { CheckoutPage } from "./CheckoutPage";
 
 export class PageManager {
   private readonly page: Page;
@@ -11,6 +12,7 @@ export class PageManager {
   private loginPage?: LoginPage;
   private invetoryPage?: InventroyPage;
   private cartPage?: cartPage;
+  private checkoutPage?: CheckoutPage;
 
   private attachFn?: (content: string, type: string) => void;
 
@@ -24,6 +26,7 @@ export class PageManager {
     if (this.loginPage) this.loginPage.setAttachFunction(fun);
     if (this.invetoryPage) this.invetoryPage.setAttachFunction(fun);
     if (this.cartPage) this.cartPage.setAttachFunction(fun);
+    if (this.checkoutPage) this.checkoutPage.setAttachFunction(fun);
   }
 
   public get login() {
@@ -48,5 +51,13 @@ export class PageManager {
       if (this.attachFn) this.cartPage.setAttachFunction(this.attachFn);
     }
     return this.cartPage;
+  }
+
+  public get checkout() {
+    if (!this.checkoutPage) {
+      this.checkoutPage = new CheckoutPage(this.page, this.ai);
+      if (this.attachFn) this.checkoutPage.setAttachFunction(this.attachFn);
+    }
+    return this.checkoutPage;
   }
 }
