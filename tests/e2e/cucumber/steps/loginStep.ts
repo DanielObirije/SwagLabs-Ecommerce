@@ -24,5 +24,5 @@ When("I login with {string} and {string}", async function (user, pass) {
 
 Then("I should be redirected to the product showcase", async function () {
   console.log("[Step] Validating redirection to Product Showcase...");
-  await expect(this.page).toHaveURL(/.*inventory\.html/, { timeout: 10000 });
+  await expect(this.page).toHaveURL(/.*inventory\.html/);
 });

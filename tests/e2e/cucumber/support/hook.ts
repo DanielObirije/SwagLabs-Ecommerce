@@ -29,8 +29,7 @@ let context: BrowserContext;
 setDefaultTimeout(120 * 1000);
 
 BeforeAll(async () => {
-  const headlessMode =
-    process.env.CI === "true" || process.env.HEADLESS === "true";
+  const headlessMode = process.env.HEADLESS === "true";
   browser = await chromium.launch({
     headless: headlessMode,
     args: [

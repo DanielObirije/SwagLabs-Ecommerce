@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:e2e": "playwright test",
-    "test:e2e:headed": "playwright test --headed",
-    "test:e2e:ui": "playwright test --ui",
-    "test:cucumber": "cucumber-js --config cucumber.js"
+    "test:cucumber": "cucumber-js --config cucumber.js",
+    "test:cucumber:tags": "cucumber-js --config cucumber.js --tags '@smoke'",
+    "test:cucumber:headed": "HEADLESS=false cucumber-js --config cucumber.js"
   },
   "keywords": [],
   "author": "",
