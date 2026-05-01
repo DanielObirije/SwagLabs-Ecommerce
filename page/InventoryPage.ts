@@ -39,7 +39,6 @@ export class InventroyPage extends BasePage {
     });
     await this.goToCart();
     await this.validateTitle("Your Cart");
-    
   }
 
   async goToCart() {

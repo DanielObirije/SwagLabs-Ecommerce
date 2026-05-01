@@ -39,7 +39,6 @@ export class cartPage extends BasePage {
     await this.page.waitForSelector(this.checkoutContainer, {
       state: "visible",
     });
-    
   }
 
   async continueShoopping() {

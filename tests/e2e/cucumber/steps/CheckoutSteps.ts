@@ -1,5 +1,6 @@
 import { When, Then, Given } from "@cucumber/cucumber";
 import { customWorld } from "../support/word";
+import { faker } from "@faker-js/faker";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -32,8 +33,41 @@ When("I proceed to checkout", async function (this: customWorld) {
 });
 
 When(
+  "I try to continue without filling out the form",
+  async function (this: customWorld) {
+    await this.pageManager?.checkout.clickContinue();
+  },
+);
+
+Then(
+  "I should see the checkout error message {string}",
+  async function (this: customWorld, errorMessage) {
+    await this.pageManager?.checkout.validateErrorMessage(errorMessage);
+  },
+);
+
+When(
   "I fill in the delivery details correctly",
   async function (this: customWorld) {
-    await this.pageManager?.cart.proccedToCheckout();
+    const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
+    const postalCode = faker.location.zipCode();
+    await this.pageManager?.checkout.fillCheckoutForm(
+      firstName,
+      lastName,
+      postalCode,
+    );
+  },
+);
+
+When("I complete the purchase", async function (this: customWorld) {
+  await this.pageManager?.checkout.completePurchase();
+});
+
+Then(
+  "I should see the confirmation message {string}",
+  async function (this: customWorld, message) {
+    await this.pageManager?.inventory.validateTitle("Checkout: Complete!");
+    await this.pageManager?.checkout.validateOrderSuccess(message);
   },
 );
