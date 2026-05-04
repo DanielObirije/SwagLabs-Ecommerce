@@ -16,7 +16,10 @@ export class InventroyPage extends BasePage {
   private readonly productItemName = ".inventory_item_name ";
   private readonly productDescription = ".inventory_item_desc";
   private readonly productItemPrice = ".inventory_item_price";
-  private readonly sortProduct = ".product_sort_container";
+  private readonly inventoryItemName = "[data-test='inventory-item-name']";
+  private readonly inventoryItemDesc = "[data-test='inventory-item-desc']";
+  private readonly inventoryItemPrice = "[data-test='inventory-item-price']";
+  private readonly inventoryItemImage = ".inventory_details_img";
 
   constructor(page: Page, ai: AiService) {
     super(page, ai);
@@ -114,6 +117,60 @@ export class InventroyPage extends BasePage {
     buttons.forEach((text) =>
       expect(text.toLowerCase()).toBe(buttonText.toLowerCase()),
     );
+  }
+
+  async openProductAndGetDetails(productName: string) {
+    const item = this.page.locator(this.productItem, {
+      hasText: productName,
+    });
+
+    await expect(item).toBeVisible();
+
+    const name = await item.locator(this.productItemName).innerText();
+    const description = await item.locator(this.productDescription).innerText();
+    const price = await item.locator(this.productItemPrice).innerText();
+    const imageSrc = await item
+      .locator(this.inventoryImage)
+      .getAttribute("src");
+
+    expect(name).toBeTruthy();
+    expect(description).toBeTruthy();
+    expect(price).toBeTruthy();
+    expect(imageSrc).toBeTruthy();
+
+    await item.locator('[data-test$="title-link"]').click();
+
+    return {
+      name,
+      description,
+      price,
+      imageSrc,
+    };
+  }
+
+  async validateProductDetails(details: {
+    name: string;
+    description: string;
+    price: string;
+    imageSrc: string | null;
+  }) {
+    await expect(this.page.locator(this.inventoryItemName)).toHaveText(
+      details.name,
+    );
+
+    await expect(this.page.locator(this.inventoryItemDesc)).toHaveText(
+      details.description,
+    );
+
+    await expect(this.page.locator(this.inventoryItemPrice)).toHaveText(
+      details.price,
+    );
+
+    const detailsImageSrc = await this.page
+      .locator(this.inventoryItemImage)
+      .getAttribute("src");
+
+    expect(detailsImageSrc).toBe(details.imageSrc);
   }
 
   async validateSpecificProduct(productDetails: string[][]) {

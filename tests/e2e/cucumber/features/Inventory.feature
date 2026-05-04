@@ -13,6 +13,11 @@ Feature: Inventory Page Componet Validation
     And I should see the hamburger menu
     And I should see the shopping cart
     And I should see the sorting filter
+  
+  @inventory @edgecase
+  Scenario: Validate product details consistency
+  When I validate product details consistency for "Sauce Labs Backpack"
+  Then all product details should match between listing and details page
 
   @inventory @components @products
   Scenario: Validate list of available products

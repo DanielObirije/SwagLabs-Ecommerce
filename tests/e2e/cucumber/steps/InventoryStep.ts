@@ -39,6 +39,23 @@ Then("I should see the sorting filter", async function (this: customWorld) {
   await this.pageManager!.inventory.validateSortDropdown();
 });
 
+Given(
+  "I validate product details consistency for {string}",
+  async function (this: customWorld, productName) {
+    this.productDetails =
+      await this.pageManager!.inventory.openProductAndGetDetails(productName);
+  },
+);
+
+Then(
+  "all product details should match between listing and details page",
+  async function (this: customWorld) {
+    await this.pageManager!.inventory.validateProductDetails(
+      this.productDetails!,
+    );
+  },
+);
+
 Then(
   "I should see {int} products in the list",
   async function (this: customWorld, count) {
@@ -77,5 +94,3 @@ Then(
     await this.pageManager!.inventory.validateSortOption(options);
   },
 );
-
-
