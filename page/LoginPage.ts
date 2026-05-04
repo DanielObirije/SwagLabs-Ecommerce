@@ -47,4 +47,11 @@ export class LoginPage extends BasePage {
     expect(errorcContainer).toBeVisible();
     expect(errorcContainer).toHaveText(message);
   }
+
+  async validateLoginDetails() {
+    await expect(this.page.locator(this.userinput)).toBeVisible();
+    await expect(this.page.locator(this.passwordinput)).toBeVisible();
+    await expect(this.page.locator(this.loginbutton)).toBeVisible();
+    await expect(this.page.locator(this.loginbutton)).toHaveText(/Login/);
+  }
 }
